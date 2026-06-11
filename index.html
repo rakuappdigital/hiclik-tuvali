@@ -7,7 +7,7 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background:#0a0a0a; color:#fff;
+      background:#080808; color:#fff;
       font-family:'Georgia',serif;
       height:100dvh; overflow:hidden;
       user-select:none; -webkit-user-select:none;
@@ -16,74 +16,66 @@
       width:100vw; height:100dvh;
       display:flex; flex-direction:column;
       align-items:center; justify-content:center;
-      gap:18px; position:relative;
+      gap:16px; position:relative;
     }
-
-    /* top */
     #top-bar {
       position:absolute; top:0; left:0; right:0;
       padding:20px 26px 0;
       display:flex; justify-content:space-between; align-items:flex-start;
     }
-    #date-label { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.28); }
-    #artwork-title { font-size:11px; color:rgba(255,255,255,.4); font-style:italic; text-align:right; max-width:180px; line-height:1.5; }
+    #date-label { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.25); }
+    #artwork-title { font-size:11px; color:rgba(255,255,255,.38); font-style:italic; text-align:right; max-width:180px; line-height:1.5; }
 
-    /* main canvas */
     #canvas-wrap {
       position:relative;
-      width:min(88vw,460px);
+      width:min(86vw,450px);
       aspect-ratio:4/3;
       cursor:pointer; touch-action:none;
     }
-    #main-canvas { display:block; width:100%; height:100%; border-radius:3px; }
+    #main-canvas { display:block; width:100%; height:100%; }
 
-    /* overlays inside wrap */
     .ov {
       position:absolute; inset:0;
       display:flex; flex-direction:column;
       align-items:center; justify-content:center;
       gap:9px; text-align:center; padding:32px;
-      border-radius:3px;
     }
-    #frozen-ov  { background:rgba(8,8,8,.82); backdrop-filter:blur(3px); opacity:0; pointer-events:none; transition:opacity .5s; }
+    #frozen-ov  { background:rgba(6,6,6,.84); backdrop-filter:blur(4px); opacity:0; pointer-events:none; transition:opacity .5s; }
     #frozen-ov.show { opacity:1; pointer-events:auto; }
-    #exhaust-ov { background:rgba(8,8,8,.9); display:none; }
+    #exhaust-ov { background:rgba(6,6,6,.92); display:none; }
     #exhaust-ov.show { display:flex; }
-    #done-ov    { background:rgba(8,8,8,.78); backdrop-filter:blur(2px); display:none; }
+    #done-ov    { background:rgba(6,6,6,.8); backdrop-filter:blur(3px); display:none; }
     #done-ov.show    { display:flex; }
 
-    #frozen-time { font-size:48px; color:#e8c97a; letter-spacing:.04em; font-variant-numeric:tabular-nums; line-height:1; }
-    .ov-label { font-size:10px; color:rgba(255,255,255,.35); letter-spacing:.14em; text-transform:uppercase; margin-bottom:4px; }
-    .ov h2 { font-size:18px; color:#e8c97a; font-weight:normal; margin-bottom:2px; }
-    .ov p  { font-size:11px; color:rgba(255,255,255,.28); line-height:1.9; margin-bottom:8px; }
+    #frozen-time { font-size:46px; color:#e8c97a; letter-spacing:.04em; font-variant-numeric:tabular-nums; line-height:1; }
+    .ov-label { font-size:10px; color:rgba(255,255,255,.3); letter-spacing:.14em; text-transform:uppercase; margin-bottom:2px; }
+    .ov h2 { font-size:17px; color:#e8c97a; font-weight:normal; margin-bottom:2px; }
+    .ov p  { font-size:11px; color:rgba(255,255,255,.26); line-height:1.9; margin-bottom:6px; }
 
-    /* share */
     .share-row { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
     .s-btn {
       padding:6px 13px; border-radius:2px;
       font-family:'Georgia',serif; font-size:11px; letter-spacing:.05em;
-      cursor:pointer; border:1px solid; background:transparent;
-      transition:opacity .2s;
+      cursor:pointer; border:1px solid; background:transparent; transition:opacity .2s;
     }
-    .s-btn:hover { opacity:.65; }
-    .s-btn.wa { color:#4dc559; border-color:rgba(77,197,89,.35); }
-    .s-btn.tw { color:#aaa;    border-color:rgba(170,170,170,.25); }
-    .s-btn.cp { color:#e8c97a; border-color:rgba(232,201,122,.35); }
+    .s-btn:hover { opacity:.6; }
+    .s-btn.wa { color:#4dc559; border-color:rgba(77,197,89,.3); }
+    .s-btn.tw { color:#aaa;    border-color:rgba(170,170,170,.22); }
+    .s-btn.cp { color:#e8c97a; border-color:rgba(232,201,122,.3); }
 
     #retry-btn {
-      margin-top:3px; padding:6px 15px;
+      margin-top:2px; padding:6px 15px;
       border:1px solid rgba(255,255,255,.1); border-radius:2px;
-      background:transparent; color:rgba(255,255,255,.25);
+      background:transparent; color:rgba(255,255,255,.22);
       font-family:'Georgia',serif; font-size:10px; letter-spacing:.1em; cursor:pointer;
-      transition:color .2s,border-color .2s;
+      transition:color .2s, border-color .2s;
     }
     #retry-btn:hover { color:rgba(255,255,255,.5); border-color:rgba(255,255,255,.25); }
 
-    /* bottom */
     #bottom-bar { display:flex; flex-direction:column; align-items:center; gap:9px; }
     #ring-wrap  { position:relative; width:44px; height:44px; }
     #hold-ring  { width:44px; height:44px; }
-    #hold-ring .track { fill:none; stroke:rgba(255,255,255,.07); stroke-width:1.5; }
+    #hold-ring .track { fill:none; stroke:rgba(255,255,255,.06); stroke-width:1.5; }
     #hold-ring .arc   {
       fill:none; stroke:#e8c97a; stroke-width:1.5; stroke-linecap:round;
       stroke-dasharray:120; stroke-dashoffset:120;
@@ -93,15 +85,14 @@
       position:absolute; inset:0;
       display:flex; align-items:center; justify-content:center;
       font-size:9px; letter-spacing:.04em; font-style:italic;
-      color:rgba(232,201,122,.6); font-variant-numeric:tabular-nums;
+      color:rgba(232,201,122,.55); font-variant-numeric:tabular-nums;
     }
-    #hint { font-size:10px; color:rgba(255,255,255,.2); letter-spacing:.1em; }
+    #hint { font-size:10px; color:rgba(255,255,255,.18); letter-spacing:.1em; }
 
-    /* toast */
     #toast {
-      position:fixed; bottom:26px; left:50%;
+      position:fixed; bottom:24px; left:50%;
       transform:translateX(-50%) translateY(6px);
-      background:rgba(232,201,122,.1); border:1px solid rgba(232,201,122,.25);
+      background:rgba(232,201,122,.09); border:1px solid rgba(232,201,122,.22);
       color:#e8c97a; font-size:10px; letter-spacing:.08em;
       padding:6px 16px; border-radius:2px;
       opacity:0; transition:opacity .3s,transform .3s; pointer-events:none;
@@ -111,7 +102,6 @@
 </head>
 <body>
 <div id="app">
-
   <div id="top-bar">
     <div id="date-label"></div>
     <div id="artwork-title"></div>
@@ -119,20 +109,17 @@
 
   <div id="canvas-wrap">
     <canvas id="main-canvas"></canvas>
-
     <div class="ov" id="frozen-ov">
       <div id="frozen-time">0:00</div>
       <div class="ov-label">bugün bu kadar sabır gösterdin</div>
       <div class="share-row" id="frozen-share"></div>
       <button id="retry-btn">tekrar dene</button>
     </div>
-
     <div class="ov" id="exhaust-ov">
       <h2>Bugünlük bitti.</h2>
       <p>Üç hakkını da kullandın.<br>Yarın yeni bir eser seni bekliyor.</p>
       <div class="share-row" id="exhaust-share"></div>
     </div>
-
     <div class="ov" id="done-ov">
       <h2>Tamamladın.</h2>
       <p id="done-msg"></p>
@@ -150,154 +137,176 @@
     </div>
     <div id="hint">parmağını basılı tut</div>
   </div>
-
 </div>
 <div id="toast">panoya kopyalandı</div>
 
 <script>
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── Config ───────────────────────────────────────────────────────────────────
 const TARGET_MS    = 60_000;
 const MAX_ATTEMPTS = 3;
+const SITE_URL     = 'https://rakuappdigital.github.io/hiclik-tuvali/';
+const N_PATCHES    = 220; // reveal patches
 
-// Day palettes & names (7 unique)
+// Day palettes
 const DAYS = [
-  { name:'Yıldızlı Gece',  c:['#05102a','#0d2b6e','#1a5a9e','#4a90d9','#f5d020','#fffbe0'] },
-  { name:'Gün Batımı',     c:['#150500','#7a2b00','#c0390b','#e8620a','#f5b041','#fef9e0'] },
-  { name:'Orman Derinliği',c:['#030e06','#0b3318','#1a6b35','#52be80','#abebc6','#e8f8f0'] },
-  { name:'Mor Rüya',       c:['#0d0020','#3b0075','#7d3cae','#bb8fce','#f5cef3','#fff5ff'] },
-  { name:'Derin Deniz',    c:['#000d1a','#002855','#0055aa','#3399dd','#99d6f5','#e8f8ff'] },
-  { name:'Altın Çağ',      c:['#0d0700','#4d2d00','#9a5a00','#d4a017','#f7dc6f','#fefde0'] },
-  { name:'Alacakaranlık',  c:['#050510','#12123a','#2e2e7a','#7070c0','#c0c0e8','#f0f0ff'] },
+  { name:'Yıldızlı Gece',   c:['#05102a','#0d2b6e','#1a5a9e','#4a90d9','#f5d020','#fffbe0'] },
+  { name:'Gün Batımı',      c:['#150500','#7a2b00','#c0390b','#e8620a','#f5b041','#fef9e0'] },
+  { name:'Orman Derinliği', c:['#030e06','#0b3318','#1a6b35','#52be80','#abebc6','#e8f8f0'] },
+  { name:'Mor Rüya',        c:['#0d0020','#3b0075','#7d3cae','#bb8fce','#f5cef3','#fff5ff'] },
+  { name:'Derin Deniz',     c:['#000d1a','#002855','#0055aa','#3399dd','#99d6f5','#e8f8ff'] },
+  { name:'Altın Çağ',       c:['#0d0700','#4d2d00','#9a5a00','#d4a017','#f7dc6f','#fefde0'] },
+  { name:'Alacakaranlık',   c:['#050510','#12123a','#2e2e7a','#7070c0','#c0c0e8','#f0f0ff'] },
 ];
 
-// Seeded random
+// ─── Seeded RNG ───────────────────────────────────────────────────────────────
 function rng(seed) {
   let s = seed >>> 0;
   return () => {
-    s = Math.imul(s ^ (s >>> 17), 0x45d9f3b);
-    s = Math.imul(s ^ (s >>> 13), 0x2f286c41);
-    s ^= s >>> 16;
+    s ^= s << 13; s ^= s >>> 17; s ^= s << 5;
     return (s >>> 0) / 0xffffffff;
   };
 }
 
-function hex2(n) { return Math.round(Math.max(0,Math.min(255,n))).toString(16).padStart(2,'0'); }
-function alpha(hex, a) { return hex + hex2(a * 255); }
+function h2(n) { return Math.round(Math.max(0,Math.min(255,n))).toString(16).padStart(2,'0'); }
+function ac(hex, a) { return hex + h2(a*255); }
 
-// Generate the day's artwork onto an offscreen canvas
+// ─── Procedural artwork ───────────────────────────────────────────────────────
 function generateArt(day) {
   const info = DAYS[day % DAYS.length];
-  const c    = info.c;
-  const W = 920, H = 690;
+  const c = info.c;
+  const W = 900, H = 675;
   const off = document.createElement('canvas');
   off.width = W; off.height = H;
-  const g   = off.getContext('2d');
-  const R   = rng(day * 99991 + 31337);
+  const g = off.getContext('2d');
+  const R = rng(day * 73856 + 98765);
 
   // Background gradient
-  const bg = g.createLinearGradient(0, 0, W * .4, H);
-  bg.addColorStop(0,   c[0]);
-  bg.addColorStop(.55, c[1]);
-  bg.addColorStop(1,   c[2]);
-  g.fillStyle = bg;
-  g.fillRect(0, 0, W, H);
+  const bg = g.createLinearGradient(0, 0, W*.5, H);
+  bg.addColorStop(0, c[0]); bg.addColorStop(.5, c[1]); bg.addColorStop(1, c[2]);
+  g.fillStyle = bg; g.fillRect(0,0,W,H);
 
   // Atmospheric wavy bands
-  for (let i = 0; i < 14; i++) {
-    const y0  = R() * H;
-    const amp = R() * H * .18;
-    const frq = R() * .018 + .004;
-    const ci  = Math.floor(R() * 3) + 1;
-    const al  = R() * .18 + .04;
-    g.beginPath();
-    g.moveTo(0, y0);
-    for (let x = 0; x <= W; x += 6)
-      g.lineTo(x, y0 + Math.sin(x * frq + R() * 6.28) * amp);
-    g.lineTo(W, H); g.lineTo(0, H); g.closePath();
-    g.fillStyle = alpha(c[ci], al);
-    g.fill();
+  for (let i=0; i<16; i++) {
+    const y0=R()*H, amp=R()*H*.2, frq=R()*.02+.003;
+    const ci=Math.floor(R()*3)+1, al=R()*.2+.04;
+    g.beginPath(); g.moveTo(0,y0);
+    for (let x=0;x<=W;x+=5) g.lineTo(x, y0+Math.sin(x*frq+R()*6.28)*amp);
+    g.lineTo(W,H); g.lineTo(0,H); g.closePath();
+    g.fillStyle = ac(c[ci],al); g.fill();
   }
 
   // Soft glowing blobs
-  for (let i = 0; i < 8; i++) {
-    const bx = R() * W, by = R() * H;
-    const br = R() * Math.min(W,H) * .28 + 60;
-    const ci = Math.floor(R() * 2) + 3;
-    const gr = g.createRadialGradient(bx, by, 0, bx, by, br);
-    gr.addColorStop(0, alpha(c[ci], .18));
-    gr.addColorStop(1, alpha(c[ci],  0));
-    g.fillStyle = gr;
-    g.fillRect(0, 0, W, H);
+  for (let i=0;i<10;i++) {
+    const bx=R()*W, by=R()*H, br=R()*Math.min(W,H)*.3+50;
+    const ci=Math.floor(R()*2)+3;
+    const gr=g.createRadialGradient(bx,by,0,bx,by,br);
+    gr.addColorStop(0,ac(c[ci],.2)); gr.addColorStop(1,ac(c[ci],0));
+    g.fillStyle=gr; g.fillRect(0,0,W,H);
   }
 
-  // Brush strokes
-  g.lineCap = 'round';
-  for (let i = 0; i < 55; i++) {
-    const x   = R() * W, y = R() * H;
-    const len = R() * 90 + 25;
-    const ang = R() * 6.28;
-    const crv = (R()-.5) * 70;
-    const lw  = R() * 7 + 1.5;
-    const ci  = Math.floor(R() * c.length);
-    const al  = R() * .22 + .04;
-    g.beginPath();
-    g.moveTo(x, y);
+  // Impressionist brush strokes — varied size and direction
+  g.lineCap='round';
+  for (let i=0;i<80;i++) {
+    const x=R()*W, y=R()*H;
+    const len=R()*100+15, ang=R()*6.28, crv=(R()-.5)*80;
+    const lw=R()*8+1, ci=Math.floor(R()*c.length), al=R()*.25+.04;
+    g.beginPath(); g.moveTo(x,y);
     g.quadraticCurveTo(
-      x + Math.cos(ang)*len*.5 + Math.cos(ang+1.57)*crv,
-      y + Math.sin(ang)*len*.5 + Math.sin(ang+1.57)*crv,
-      x + Math.cos(ang)*len,
-      y + Math.sin(ang)*len
+      x+Math.cos(ang)*len*.5+Math.cos(ang+1.57)*crv,
+      y+Math.sin(ang)*len*.5+Math.sin(ang+1.57)*crv,
+      x+Math.cos(ang)*len, y+Math.sin(ang)*len
     );
-    g.strokeStyle = alpha(c[ci], al);
-    g.lineWidth   = lw;
-    g.stroke();
+    g.strokeStyle=ac(c[ci],al); g.lineWidth=lw; g.stroke();
   }
 
-  // Stars / sparkles
-  for (let i = 0; i < 120; i++) {
-    const sx = R() * W, sy = R() * H * .65;
-    const sr = R() * 2.2 + .4;
-    const al = R() * .75 + .25;
-    g.beginPath();
-    g.arc(sx, sy, sr, 0, 6.28);
-    g.fillStyle = alpha(c[5], al);
-    g.fill();
+  // Stars/sparkles — scattered, mostly upper half
+  for (let i=0;i<150;i++) {
+    const sx=R()*W, sy=R()*H*.7;
+    const sr=R()*2.5+.3, al=R()*.8+.2;
+    g.beginPath(); g.arc(sx,sy,sr,0,6.28);
+    g.fillStyle=ac(c[5],al); g.fill();
   }
 
-  // Moon / sun focal glow
-  const gx = W * (.2 + R() * .6);
-  const gy = H * (.05 + R() * .35);
-  const gr2 = g.createRadialGradient(gx, gy, 0, gx, gy, 140);
-  gr2.addColorStop(0,   alpha(c[5], .95));
-  gr2.addColorStop(.25, alpha(c[4], .4));
-  gr2.addColorStop(1,   alpha(c[4],  0));
-  g.fillStyle = gr2;
-  g.fillRect(0, 0, W, H);
+  // Focal glow (moon/sun)
+  const gx=W*(.2+R()*.6), gy=H*(.05+R()*.3);
+  const gr2=g.createRadialGradient(gx,gy,0,gx,gy,160);
+  gr2.addColorStop(0,ac(c[5],.9)); gr2.addColorStop(.3,ac(c[4],.35)); gr2.addColorStop(1,ac(c[4],0));
+  g.fillStyle=gr2; g.fillRect(0,0,W,H);
 
-  const bodyR = 22 + R() * 24;
-  g.beginPath();
-  g.arc(gx, gy, bodyR, 0, 6.28);
-  g.fillStyle = alpha(c[5], .9);
-  g.fill();
+  const br=18+R()*28;
+  g.beginPath(); g.arc(gx,gy,br,0,6.28);
+  g.fillStyle=ac(c[5],.92); g.fill();
 
-  return { canvas: off, name: info.name };
+  return { canvas:off, name:info.name };
 }
 
-// ─── State ───────────────────────────────────────────────────────────────────
+// ─── Patch-based reveal ───────────────────────────────────────────────────────
+// Each patch is a rotated ellipse with a "reveal index" determining when it appears.
+// Distribution is intentionally uneven — clustered in some areas, sparse in others —
+// so the image stays unrecognizable for a long time.
+function buildPatches(W, H, day) {
+  const R = rng(day * 44449 + 11111);
+  const patches = [];
+
+  // We place patches in two ways:
+  // 70% completely random (true scatter)
+  // 30% clustered around N random focal points (creates dense + sparse areas)
+  const clusterCenters = Array.from({length:8}, () => ({x:R()*W, y:R()*H}));
+
+  for (let i=0; i<N_PATCHES; i++) {
+    let x, y;
+    if (R() < 0.65) {
+      x = R() * W; y = R() * H; // random
+    } else {
+      const cc = clusterCenters[Math.floor(R()*clusterCenters.length)];
+      x = cc.x + (R()-.5)*W*.35;
+      y = cc.y + (R()-.5)*H*.35;
+    }
+    // Eccentric ellipses — very varied aspect ratios
+    const major = W * (R()*.12 + .03);    // 3–15% of width
+    const minor = major * (R()*.55 + .15); // very squished to rounder
+    const angle = R() * Math.PI;
+
+    // Reveal order: shuffle later — for now, store natural index
+    patches.push({ x, y, rx:major, ry:minor, angle });
+  }
+
+  // Shuffle reveal order (Fisher-Yates with same RNG)
+  const order = patches.map((_,i)=>i);
+  for (let i=order.length-1;i>0;i--) {
+    const j=Math.floor(R()*(i+1));
+    [order[i],order[j]]=[order[j],order[i]];
+  }
+  // Apply order: patch[order[i]] is revealed at step i
+  const result = new Array(N_PATCHES);
+  order.forEach((pIdx,step) => { result[step] = patches[pIdx]; });
+  return result;
+}
+
+// ─── State ────────────────────────────────────────────────────────────────────
 function todayDay() {
-  const n = new Date(), s = new Date(n.getFullYear(), 0, 0);
-  return Math.floor((n - s) / 86400000);
+  const n=new Date(), s=new Date(n.getFullYear(),0,0);
+  return Math.floor((n-s)/86400000);
 }
 function todayKey() {
-  const d = new Date();
+  const d=new Date();
   return `hiclik_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
 }
 
-let attempts = MAX_ATTEMPTS, elapsed = 0, completed = false;
-let isHolding = false, frozen = false, startTime = null, rafId = null;
-let artCanvas = null, artName = '';
+let attempts=MAX_ATTEMPTS, elapsed=0, completed=false;
+let isHolding=false, frozen=false, startTime=null, rafId=null;
+let artCanvas=null, artName='';
+let patches=[], revealedCount=0;
 
-// ─── DOM ─────────────────────────────────────────────────────────────────────
+// Offscreen mask canvas (accumulates revealed patches)
+const maskCv  = document.createElement('canvas');
+const maskCtx = maskCv.getContext('2d');
+
+// Offscreen art-layer canvas (artwork masked by maskCv)
+const artLyrCv  = document.createElement('canvas');
+const artLyrCtx = artLyrCv.getContext('2d');
+
+// ─── DOM ──────────────────────────────────────────────────────────────────────
 const wrap      = document.getElementById('canvas-wrap');
 const canvas    = document.getElementById('main-canvas');
 const ctx       = canvas.getContext('2d');
@@ -308,164 +317,237 @@ const doneOv    = document.getElementById('done-ov');
 const doneMsgEl = document.getElementById('done-msg');
 const timerEl   = document.getElementById('timer');
 const hintEl    = document.getElementById('hint');
-const arc       = document.querySelector('#hold-ring .arc');
+const arcEl     = document.querySelector('#hold-ring .arc');
 const dateLbl   = document.getElementById('date-label');
 const titleLbl  = document.getElementById('artwork-title');
 const toast     = document.getElementById('toast');
 
-// ─── Canvas draw ─────────────────────────────────────────────────────────────
+// ─── Canvas/mask setup ────────────────────────────────────────────────────────
 function resize() {
-  canvas.width  = wrap.clientWidth;
-  canvas.height = wrap.clientHeight;
-  draw(elapsed / TARGET_MS);
+  const W = wrap.clientWidth, H = wrap.clientHeight;
+  canvas.width = maskCv.width = artLyrCv.width  = W;
+  canvas.height= maskCv.height= artLyrCv.height = H;
+  // Rebuild patches for new size
+  patches = buildPatches(W, H, todayDay());
+  revealedCount = 0;
+  maskCtx.clearRect(0,0,W,H);
+  // Re-reveal up to current progress
+  addPatchesToMask(Math.floor(elapsed/TARGET_MS * N_PATCHES));
+  draw(elapsed/TARGET_MS);
 }
 
+// Add patches [revealedCount .. target) onto the mask canvas incrementally
+function addPatchesToMask(target) {
+  target = Math.min(target, N_PATCHES);
+  if (target <= revealedCount) return;
+
+  const W = maskCv.width, H = maskCv.height;
+  maskCtx.save();
+  // Soft-edged patches via blur filter
+  maskCtx.filter = 'blur(6px)';
+  maskCtx.fillStyle = '#fff';
+
+  for (let i = revealedCount; i < target; i++) {
+    const p = patches[i];
+    // Scale patch coordinates from generation space to canvas space
+    maskCtx.save();
+    maskCtx.translate(p.x, p.y);
+    maskCtx.rotate(p.angle);
+    maskCtx.beginPath();
+    maskCtx.ellipse(0, 0, p.rx, p.ry, 0, 0, Math.PI*2);
+    maskCtx.fill();
+    maskCtx.restore();
+  }
+
+  maskCtx.filter = 'none';
+  maskCtx.restore();
+  revealedCount = target;
+}
+
+// ─── Main draw ────────────────────────────────────────────────────────────────
 function draw(progress) {
-  const w = canvas.width, h = canvas.height;
-  const cx = w/2, cy = h/2;
-  ctx.clearRect(0, 0, w, h);
-
-  // No progress yet → ornate empty frame
-  if (progress <= 0 || !artCanvas) {
-    drawFrame(w, h);
-    return;
-  }
-
-  // Full reveal → artwork + vignette + frame
-  if (progress >= 1) {
-    ctx.drawImage(artCanvas, 0, 0, w, h);
-    const vig = ctx.createRadialGradient(cx, cy, Math.min(w,h)*.28, cx, cy, Math.max(w,h)*.72);
-    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,.32)');
-    ctx.fillStyle = vig; ctx.fillRect(0, 0, w, h);
-    drawFrameOnly(w, h);
-    return;
-  }
-
-  // Partial reveal — clip to growing circle, draw art inside
-  const maxR  = Math.sqrt(cx*cx + cy*cy) * 1.08;
-  const eased = Math.pow(progress, 0.58);
-  const r     = maxR * eased;
-  const soft  = Math.max(24, r * 0.13);
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
 
   // Dark background
   ctx.fillStyle = '#0a0a0a';
-  ctx.fillRect(0, 0, w, h);
+  ctx.fillRect(0,0,W,H);
 
-  // Artwork clipped to circle
+  if (progress <= 0 || !artCanvas) {
+    drawFrameInitial(W, H);
+    return;
+  }
+
+  if (progress >= 1) {
+    // Full reveal
+    ctx.drawImage(artCanvas, 0,0,W,H);
+    // Subtle vignette
+    const vig = ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.25,W/2,H/2,Math.max(W,H)*.75);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,.3)');
+    ctx.fillStyle=vig; ctx.fillRect(0,0,W,H);
+    drawGoldFrame(W,H);
+    return;
+  }
+
+  // Partial: use mask to reveal artwork
+  // Step 1: draw artwork onto artLyrCv
+  artLyrCtx.clearRect(0,0,W,H);
+  artLyrCtx.drawImage(artCanvas,0,0,W,H);
+  // Step 2: mask it with maskCv (destination-in keeps only where mask is opaque)
+  artLyrCtx.globalCompositeOperation='destination-in';
+  artLyrCtx.drawImage(maskCv,0,0,W,H);
+  artLyrCtx.globalCompositeOperation='source-over';
+
+  // Step 3: draw masked artwork over dark background
+  ctx.drawImage(artLyrCv,0,0,W,H);
+
+  drawGoldFrame(W,H);
+}
+
+// ─── Frame: realistic gold bevel ─────────────────────────────────────────────
+function drawGoldFrame(W, H) {
+  const fw = Math.min(W,H) * .072; // frame thickness
+
+  // Drop shadow behind frame
   ctx.save();
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI*2);
-  ctx.clip();
-  ctx.drawImage(artCanvas, 0, 0, w, h);
+  ctx.shadowColor = 'rgba(0,0,0,0.75)';
+  ctx.shadowBlur  = 18;
+  ctx.shadowOffsetX = 3; ctx.shadowOffsetY = 5;
+  ctx.fillStyle = '#0a0a0a';
+  // Draw a thin outer rect just to trigger shadow
+  ctx.fillRect(0,0,W,3);
+  ctx.fillRect(0,0,3,H);
+  ctx.fillRect(W-3,0,3,H);
+  ctx.fillRect(0,H-3,W,3);
   ctx.restore();
 
-  // Soft dark edge at circle boundary
-  ctx.save();
+  // Four trapezoidal sides with beveled gold gradients
+  // TOP (bright highlight on outer edge, dark on inner)
+  const top = ctx.createLinearGradient(0,0,0,fw);
+  top.addColorStop(0,  '#f7e88a');
+  top.addColorStop(.18,'#d4a81a');
+  top.addColorStop(.55,'#8a6000');
+  top.addColorStop(1,  '#3a2200');
+  ctx.fillStyle = top;
   ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI*2);
-  ctx.clip();
-  const edge = ctx.createRadialGradient(cx, cy, Math.max(0, r-soft), cx, cy, r);
-  edge.addColorStop(0, 'rgba(10,10,10,0)');
-  edge.addColorStop(1, 'rgba(10,10,10,1)');
-  ctx.fillStyle = edge;
-  ctx.fillRect(0, 0, w, h);
-  ctx.restore();
+  ctx.moveTo(0,0); ctx.lineTo(W,0); ctx.lineTo(W-fw,fw); ctx.lineTo(fw,fw);
+  ctx.closePath(); ctx.fill();
 
-  // Frame always on top
-  drawFrameOnly(w, h);
-}
-
-// Full initial screen (dark bg + frame + hint text)
-function drawFrame(w, h) {
-  ctx.fillStyle = '#0d0d0d';
-  ctx.fillRect(0, 0, w, h);
-
-  drawFrameOnly(w, h);
-
-  // Inner canvas area tint
-  const pad = Math.min(w,h)*.09, ip = pad*.5;
-  ctx.fillStyle = 'rgba(255,255,255,.012)';
-  rrect(ip, ip*(h/w)*.9, w-ip*2, h-ip*(h/w)*1.8, 2);
-  ctx.fill();
-
-  // Center hint text
-  const fs = Math.round(w*.026);
-  ctx.fillStyle = 'rgba(232,201,122,.18)';
-  ctx.font = `italic ${fs}px Georgia`;
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('hiçlik tuvali', w/2, h/2-11);
-  ctx.fillStyle = 'rgba(255,255,255,.07)';
-  ctx.font = `${Math.round(fs*.82)}px Georgia`;
-  ctx.fillText('basılı tut', w/2, h/2+13);
-}
-
-// Just the frame lines + corners — drawn on top of anything
-function drawFrameOnly(w, h) {
-  const pad = Math.min(w,h)*.09;
-  const layers = [
-    { inset:pad*.1,  color:'rgba(232,201,122,.45)', lw:1.6 },
-    { inset:pad*.32, color:'rgba(180,140,60,.22)',  lw:.9  },
-    { inset:pad*.5,  color:'rgba(232,201,122,.13)', lw:.7  },
-  ];
-  layers.forEach(({ inset:p, color, lw }) => {
-    ctx.strokeStyle = color; ctx.lineWidth = lw;
-    rrect(p, p*(h/w)*.9, w-p*2, h-p*(h/w)*1.8, 3);
-    ctx.stroke();
-  });
-
-  // Corner ornaments
-  const cs = pad*.55, co = pad*.1;
-  [[co,co],[w-co,co],[w-co,h-co],[co,h-co]].forEach(([x,y]) => {
-    const sx = x<w/2?1:-1, sy = y<h/2?1:-1;
-    ctx.strokeStyle = 'rgba(232,201,122,.35)'; ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    ctx.moveTo(x+sx*cs, y); ctx.lineTo(x, y); ctx.lineTo(x, y+sy*cs);
-    ctx.stroke();
-  });
-}
-
-function rrect(x, y, w, h, r) {
+  // BOTTOM (dark outer edge, lighter inner)
+  const bot = ctx.createLinearGradient(0,H,0,H-fw);
+  bot.addColorStop(0,  '#2a1400');
+  bot.addColorStop(.35,'#7a5200');
+  bot.addColorStop(.7, '#b88820');
+  bot.addColorStop(1,  '#e8c440');
+  ctx.fillStyle = bot;
   ctx.beginPath();
-  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
-  ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r);
-  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h);
-  ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r);
-  ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+  ctx.moveTo(0,H); ctx.lineTo(W,H); ctx.lineTo(W-fw,H-fw); ctx.lineTo(fw,H-fw);
+  ctx.closePath(); ctx.fill();
+
+  // LEFT (medium brightness)
+  const lft = ctx.createLinearGradient(0,0,fw,0);
+  lft.addColorStop(0,  '#e8d870');
+  lft.addColorStop(.3, '#a87a10');
+  lft.addColorStop(.7, '#6a4800');
+  lft.addColorStop(1,  '#3a2400');
+  ctx.fillStyle = lft;
+  ctx.beginPath();
+  ctx.moveTo(0,0); ctx.lineTo(0,H); ctx.lineTo(fw,H-fw); ctx.lineTo(fw,fw);
+  ctx.closePath(); ctx.fill();
+
+  // RIGHT
+  const rgt = ctx.createLinearGradient(W,0,W-fw,0);
+  rgt.addColorStop(0,  '#2a1800');
+  rgt.addColorStop(.3, '#6a4600');
+  rgt.addColorStop(.7, '#aa8018');
+  rgt.addColorStop(1,  '#d8b848');
+  ctx.fillStyle = rgt;
+  ctx.beginPath();
+  ctx.moveTo(W,0); ctx.lineTo(W,H); ctx.lineTo(W-fw,H-fw); ctx.lineTo(W-fw,fw);
+  ctx.closePath(); ctx.fill();
+
+  // Thin gold highlight on outermost edge
+  ctx.strokeStyle = 'rgba(252,240,140,.45)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(.5,.5,W-1,H-1);
+
+  // Thin dark inner shadow line
+  ctx.strokeStyle = 'rgba(0,0,0,.7)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(fw-.5, fw-.5, W-fw*2+1, H-fw*2+1);
+
+  // Subtle inner edge gold highlight
+  ctx.strokeStyle = 'rgba(232,200,80,.2)';
+  ctx.lineWidth = .8;
+  ctx.strokeRect(fw+1, fw+1, W-fw*2-2, H-fw*2-2);
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// Initial screen: empty canvas with frame + atmospheric hint
+function drawFrameInitial(W, H) {
+  // Dark textured background inside frame
+  ctx.fillStyle = '#0e0e0e';
+  ctx.fillRect(0,0,W,H);
+
+  // Very subtle canvas texture lines (like linen)
+  ctx.strokeStyle = 'rgba(255,255,255,.018)';
+  ctx.lineWidth = .5;
+  for (let y=0; y<H; y+=6) {
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+  }
+
+  // Atmospheric center glow (empty canvas has a faint warmth)
+  const cg = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.min(W,H)*.55);
+  cg.addColorStop(0,'rgba(80,60,20,.12)');
+  cg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=cg; ctx.fillRect(0,0,W,H);
+
+  // Centered text
+  const fs = Math.round(W*.024);
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='rgba(232,201,122,.15)';
+  ctx.font=`italic ${fs}px Georgia`;
+  ctx.fillText('hiçlik tuvali', W/2, H/2-10);
+  ctx.fillStyle='rgba(255,255,255,.06)';
+  ctx.font=`${Math.round(fs*.78)}px Georgia`;
+  ctx.fillText('basılı tut', W/2, H/2+13);
+
+  drawGoldFrame(W,H);
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 function fmt(ms) {
-  const s = Math.floor(ms/1000);
+  const s=Math.floor(ms/1000);
   return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
 }
-function setArc(p) { arc.style.strokeDashoffset = 120*(1-Math.min(p,1)); }
+function setArc(p) { arcEl.style.strokeDashoffset = 120*(1-Math.min(p,1)); }
 function updateHint() {
   hintEl.textContent = attempts<=0 ? 'bugünlük bitti'
     : attempts===1 ? 'son hakkın' : 'parmağını basılı tut';
 }
 function save() {
-  localStorage.setItem(todayKey(), JSON.stringify({ attempts, elapsed, completed }));
+  localStorage.setItem(todayKey(), JSON.stringify({attempts,elapsed,completed}));
 }
 function showToast() {
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2000);
+  setTimeout(()=>toast.classList.remove('show'), 2000);
 }
 
-// ─── Share ───────────────────────────────────────────────────────────────────
+// ─── Share ────────────────────────────────────────────────────────────────────
 function buildText(ms) {
   const d = new Date().toLocaleDateString('tr-TR',{day:'numeric',month:'long'});
-  return `Hiçlik Tuvali · ${d}\n"${artName}"\n\nBugün ${fmt(ms)} boyunca durdum ve hiçbir şey yapmadım.`;
+  return `Hiçlik Tuvali · ${d}\n"${artName}"\n\nBugün ${fmt(ms)} boyunca durdum ve hiçbir şey yapmadım.\n\n${SITE_URL}`;
 }
+
 function shareRow(id, getMs) {
   const row = document.getElementById(id);
-  row.innerHTML = '';
-  const wa = document.createElement('button'); wa.className='s-btn wa'; wa.textContent='WhatsApp';
-  wa.onclick = () => window.open(`https://wa.me/?text=${encodeURIComponent(buildText(getMs()))}`);
-  const tw = document.createElement('button'); tw.className='s-btn tw'; tw.textContent='X / Twitter';
-  tw.onclick = () => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(buildText(getMs()))}`);
-  const cp = document.createElement('button'); cp.className='s-btn cp'; cp.textContent='Kopyala';
-  cp.onclick = () => navigator.clipboard.writeText(buildText(getMs())).then(showToast).catch(()=>{});
-  row.append(wa, tw, cp);
+  row.innerHTML='';
+  const wa=document.createElement('button'); wa.className='s-btn wa'; wa.textContent='WhatsApp';
+  wa.onclick=()=>window.open(`https://wa.me/?text=${encodeURIComponent(buildText(getMs()))}`);
+  const tw=document.createElement('button'); tw.className='s-btn tw'; tw.textContent='X / Twitter';
+  tw.onclick=()=>window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(buildText(getMs()))}`);
+  const cp=document.createElement('button'); cp.className='s-btn cp'; cp.textContent='Kopyala';
+  cp.onclick=()=>navigator.clipboard.writeText(buildText(getMs())).then(showToast).catch(()=>{});
+  row.append(wa,tw,cp);
 }
 
 // ─── Hold loop ────────────────────────────────────────────────────────────────
@@ -475,90 +557,89 @@ function tick() {
   const p = Math.min(elapsed/TARGET_MS, 1);
   timerEl.textContent = fmt(elapsed);
   setArc(p);
+  // Add new patches to mask incrementally
+  addPatchesToMask(Math.floor(p * N_PATCHES));
   draw(p);
-  if (p >= 1) { isHolding=false; markDone(); return; }
+  if (p>=1) { isHolding=false; markDone(); return; }
   rafId = requestAnimationFrame(tick);
 }
 
 function startHold(e) {
   e.preventDefault();
-  if (frozen || completed || attempts<=0 || isHolding) return;
-  isHolding = true;
-  startTime = Date.now() - elapsed;
+  if (frozen||completed||attempts<=0||isHolding) return;
+  isHolding=true;
+  startTime=Date.now()-elapsed;
   frozenOv.classList.remove('show');
-  frozen = false;
-  wrap.style.filter = '';
-  hintEl.textContent = 'bırakma…';
-  rafId = requestAnimationFrame(tick);
+  frozen=false;
+  hintEl.textContent='bırakma…';
+  rafId=requestAnimationFrame(tick);
 }
 
 function stopHold() {
   if (!isHolding) return;
-  isHolding = false;
+  isHolding=false;
   cancelAnimationFrame(rafId);
   if (completed) return;
-
   attempts--;
   save();
-
-  if (elapsed > 500) {
-    frozen = true;
-    frozenTEl.textContent = fmt(elapsed);
-    shareRow('frozen-share', () => elapsed);
+  if (elapsed>500) {
+    frozen=true;
+    frozenTEl.textContent=fmt(elapsed);
+    shareRow('frozen-share',()=>elapsed);
     frozenOv.classList.add('show');
   } else {
     updateHint();
   }
-  if (attempts<=0 && !completed) setTimeout(showExhaust, elapsed>500?80:0);
+  if (attempts<=0&&!completed) setTimeout(showExhaust,elapsed>500?80:0);
 }
 
 function showExhaust() {
   frozenOv.classList.remove('show');
-  shareRow('exhaust-share', () => elapsed);
+  shareRow('exhaust-share',()=>elapsed);
   exhaustOv.classList.add('show');
 }
 
 function markDone() {
   completed=true; save();
-  doneMsgEl.textContent = `"${artName}" eserini ${fmt(elapsed)} içinde açtın.`;
-  shareRow('done-share', () => elapsed);
+  doneMsgEl.textContent=`"${artName}" eserini ${fmt(elapsed)} içinde açtın.`;
+  shareRow('done-share',()=>elapsed);
   doneOv.classList.add('show');
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 function init() {
-  const d = new Date();
-  dateLbl.textContent = d.toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
+  const d=new Date();
+  dateLbl.textContent=d.toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
 
-  const day = todayDay();
-  const { canvas: ac, name } = generateArt(day);
-  artCanvas = ac; artName = name;
-  titleLbl.textContent = name + ' · prosedürel';
+  const day=todayDay();
+  const {canvas:ac,name}=generateArt(day);
+  artCanvas=ac; artName=name;
+  titleLbl.textContent=name;
 
-  const saved   = JSON.parse(localStorage.getItem(todayKey())||'{}');
-  attempts  = saved.attempts  ?? MAX_ATTEMPTS;
-  elapsed   = saved.elapsed   ?? 0;
-  completed = saved.completed ?? false;
+  const saved=JSON.parse(localStorage.getItem(todayKey())||'{}');
+  attempts =saved.attempts  ??MAX_ATTEMPTS;
+  elapsed  =saved.elapsed   ??0;
+  completed=saved.completed ??false;
 
   resize();
   setArc(elapsed/TARGET_MS);
-  timerEl.textContent = fmt(elapsed);
+  timerEl.textContent=fmt(elapsed);
 
-  if (completed)      { draw(1); markDone(); }
-  else if (attempts<=0) { draw(elapsed/TARGET_MS); showExhaust(); }
-  else                { updateHint(); }
+  if (completed)       { addPatchesToMask(N_PATCHES); draw(1); markDone(); }
+  else if (attempts<=0){ draw(elapsed/TARGET_MS); showExhaust(); }
+  else                 { updateHint(); }
 
   window.addEventListener('resize', resize);
 }
 
-// ─── Events ──────────────────────────────────────────────────────────────────
-wrap.addEventListener('mousedown',   startHold, {passive:false});
-wrap.addEventListener('touchstart',  startHold, {passive:false});
+// ─── Events ───────────────────────────────────────────────────────────────────
+wrap.addEventListener('mousedown',   startHold,{passive:false});
+wrap.addEventListener('touchstart',  startHold,{passive:false});
 wrap.addEventListener('mouseup',     stopHold);
 wrap.addEventListener('mouseleave',  stopHold);
 wrap.addEventListener('touchend',    stopHold);
 wrap.addEventListener('touchcancel', stopHold);
-document.getElementById('retry-btn').onclick = () => {
+document.getElementById('retry-btn').onclick=()=>{
   frozenOv.classList.remove('show'); frozen=false; updateHint();
 };
 
